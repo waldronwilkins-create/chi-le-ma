@@ -555,6 +555,166 @@ body {
 }
 .share-actions .btn { flex: 1; justify-content: center; }
 
+/* ===== Photo ===== */
+.photo-upload-wrapper { position: relative; }
+.photo-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--cream);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-light);
+  transition: var(--transition);
+  font-family: inherit;
+}
+.photo-upload-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+.photo-upload-btn.has-photo { border-style: solid; border-color: var(--teal); color: var(--teal); }
+#entry-photo-input { display: none; }
+.photo-preview {
+  display: none;
+  position: relative;
+  margin-top: 8px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  width: 120px;
+}
+.photo-preview.show { display: block; }
+.photo-preview img { width: 120px; height: 120px; object-fit: cover; border-radius: var(--radius-sm); display: block; }
+.photo-preview-remove {
+  position: absolute;
+  top: 4px; right: 4px;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.photo-preview-remove:hover { background: rgba(0,0,0,0.8); }
+
+/* Photo thumbnail in entry list */
+.entry-photo-thumb {
+  width: 44px; height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  cursor: pointer;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  transition: var(--transition);
+}
+.entry-photo-thumb:hover { border-color: var(--orange); transform: scale(1.05); }
+
+/* Photo lightbox */
+.photo-lightbox-img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: var(--radius);
+  display: block;
+  margin: 0 auto;
+}
+
+/* ===== Stats Tab ===== */
+.stats-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stats-section { margin-bottom: 20px; }
+.stats-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stats-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.stats-table th {
+  text-align: left;
+  padding: 8px 10px;
+  font-weight: 600;
+  color: var(--text-lighter);
+  border-bottom: 2px solid var(--border);
+  font-size: 0.8rem;
+}
+.stats-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.stats-table tr:hover td { background: var(--cream); }
+.stats-rank-num {
+  display: inline-block;
+  width: 22px; height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-right: 4px;
+}
+.stats-rank-1 { background: #FEF9E7; color: #B7950B; }
+.stats-rank-2 { background: #F0F0F0; color: #777; }
+.stats-rank-3 { background: #FDEBD0; color: #B9770E; }
+.storage-bar {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--border);
+  overflow: hidden;
+  margin: 6px 0;
+}
+.storage-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  background: var(--orange);
+  transition: width 0.3s;
+}
+.storage-bar-fill.warning { background: var(--yellow); }
+.storage-bar-fill.danger { background: var(--red); }
+
+/* ===== Custom Dish ===== */
+.custom-dish-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+}
+.custom-dish-item .dish-emoji { font-size: 1.2rem; }
+.custom-dish-item .dish-name { flex: 1; font-weight: 600; }
+.custom-dish-item .dish-meta { font-size: 0.78rem; color: var(--text-lighter); }
+.custom-dish-actions { display: flex; gap: 4px; }
+.custom-dish-actions button {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  color: var(--text-lighter);
+}
+.custom-dish-actions .edit-btn:hover { background: var(--teal-light); color: var(--teal); }
+.custom-dish-actions .delete-btn:hover { background: var(--red-light); color: var(--red); }
+
 /* ===== Toast ===== */
 .toast-container {
   position: fixed;
@@ -615,6 +775,7 @@ body {
   <nav class="tabs">
     <button class="tab-btn active" data-tab="diary">📝 饮食记录</button>
     <button class="tab-btn" data-tab="picker">🎲 食材挑选</button>
+    <button class="tab-btn" data-tab="stats">📊 数据统计</button>
   </nav>
 
   <!-- ===== Panel 1: Food Diary ===== -->
@@ -637,6 +798,10 @@ body {
       <div class="stat-item">
         <div class="stat-count" id="stat-fav">—</div>
         <div class="stat-label">本周最爱</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-count" id="stat-month-spend">—</div>
+        <div class="stat-label">本月花费</div>
       </div>
     </div>
 
@@ -675,6 +840,19 @@ body {
       <div class="form-group" style="margin-bottom:12px">
         <label>📝 备注（可选）</label>
         <input type="text" id="entry-notes" placeholder="口味、份量…">
+      </div>
+      <div class="form-group" style="margin-bottom:12px">
+        <label>📸 照片（可选）</label>
+        <div class="photo-upload-wrapper">
+          <label class="photo-upload-btn" id="photo-upload-label">
+            <span id="photo-upload-text">📷 拍照或选择照片</span>
+          </label>
+          <input type="file" id="entry-photo-input" accept="image/*" capture="environment">
+          <div class="photo-preview" id="photo-preview">
+            <img id="photo-preview-img">
+            <button class="photo-preview-remove" id="photo-preview-remove">✕</button>
+          </div>
+        </div>
       </div>
       <button class="btn btn-primary btn-full" id="btn-add-entry">✅ 记录这一餐</button>
     </div>
@@ -720,6 +898,64 @@ body {
         </div>
       </div>
     </div>
+
+    <!-- Custom Dish Card -->
+    <div class="card" id="custom-dish-card">
+      <div class="card-title">✏️ 自定义菜肴</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" id="btn-show-custom-form">+ 添加自定义菜</button>
+      </div>
+      <div id="custom-dish-form" style="display:none;">
+        <div class="form-row">
+          <div class="form-group">
+            <label>菜名</label>
+            <input type="text" id="custom-dish-name" placeholder="如：香菇滑鸡">
+          </div>
+          <div class="form-group">
+            <label>Emoji</label>
+            <input type="text" id="custom-dish-emoji" value="🍽️" maxlength="4">
+          </div>
+          <div class="form-group">
+            <label>分类</label>
+            <select id="custom-dish-category">
+              <option>家常菜</option><option>主食</option><option>硬菜</option>
+              <option>川菜</option><option>凉菜</option><option>海鲜</option>
+              <option>素菜</option><option>汤羹</option><option>快手菜</option>
+              <option>日韩料理</option><option>面点</option><option>甜品</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>食材（用逗号分隔）</label>
+          <input type="text" id="custom-dish-ingredients" placeholder="例如：鸡肉, 土豆, 胡萝卜">
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary btn-sm" id="btn-save-custom-dish">💾 保存</button>
+          <button class="btn btn-ghost btn-sm" id="btn-cancel-custom-dish">取消</button>
+        </div>
+      </div>
+      <div id="custom-dish-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== Panel 3: Statistics ===== -->
+  <section class="panel" id="panel-stats">
+    <div class="card">
+      <div class="card-title">📊 月度汇总</div>
+      <div id="stats-monthly"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏆 餐厅排行</div>
+      <div id="stats-restaurants"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💰 价格分布</div>
+      <div id="stats-prices"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💾 存储用量</div>
+      <div id="stats-storage"></div>
+    </div>
   </section>
 
 </div>
@@ -736,6 +972,16 @@ body {
       <button class="btn btn-primary" id="btn-copy-share">📋 复制内容</button>
       <button class="btn btn-outline" id="btn-share-native">📱 系统分享</button>
     </div>
+  </div>
+</div>
+
+<!-- Lightbox Modal -->
+<div class="share-modal-overlay" id="photo-lightbox" style="display:none;">
+  <div class="share-modal" style="max-width:600px;text-align:center;">
+    <div style="position:relative;">
+      <button class="share-modal-close" id="photo-lightbox-close" style="position:absolute;top:-8px;right:-8px;">✕</button>
+    </div>
+    <img class="photo-lightbox-img" id="photo-lightbox-img">
   </div>
 </div>
 
@@ -806,10 +1052,68 @@ const DISHES = [
   { name: "苦瓜炒蛋", emoji: "🥒", ingredients: ["苦瓜", "鸡蛋"], category: "家常菜" },
   { name: "丝瓜蛋汤", emoji: "🥒", ingredients: ["丝瓜", "鸡蛋", "葱"], category: "汤羹" },
   { name: "韭菜炒蛋", emoji: "🌿", ingredients: ["韭菜", "鸡蛋"], category: "家常菜" },
+
+  // ----- 新菜扩充 (50道) -----
+  { name: "葱油拌面", emoji: "🍜", ingredients: ["面条", "葱", "酱油"], category: "主食" },
+  { name: "冷面", emoji: "🍜", ingredients: ["面条", "黄瓜", "鸡蛋", "醋"], category: "主食" },
+  { name: "扬州炒饭", emoji: "🍚", ingredients: ["米饭", "鸡蛋", "虾", "火腿", "葱"], category: "主食" },
+  { name: "老干妈炒饭", emoji: "🍚", ingredients: ["米饭", "鸡蛋", "辣椒", "葱"], category: "主食" },
+  { name: "烧麦", emoji: "🥟", ingredients: ["猪肉", "糯米", "葱", "姜"], category: "面点" },
+  { name: "窝窝头", emoji: "🥠", ingredients: ["玉米", "面粉", "糖"], category: "面点" },
+  { name: "糖醋排骨", emoji: "🍖", ingredients: ["猪肉", "酱油", "醋", "糖", "姜"], category: "硬菜" },
+  { name: "东坡肉", emoji: "🥩", ingredients: ["猪肉", "酱油", "姜", "葱", "料酒"], category: "硬菜" },
+  { name: "梅菜扣肉", emoji: "🥩", ingredients: ["猪肉", "酱油", "姜", "料酒"], category: "硬菜" },
+  { name: "狮子头", emoji: "🧆", ingredients: ["猪肉", "鸡蛋", "姜", "葱", "白菜"], category: "硬菜" },
+  { name: "粉蒸肉", emoji: "🥩", ingredients: ["猪肉", "土豆", "酱油", "姜"], category: "硬菜" },
+  { name: "糯米丸子", emoji: "🍡", ingredients: ["猪肉", "糯米", "姜", "葱"], category: "硬菜" },
+  { name: "叉烧", emoji: "🥩", ingredients: ["猪肉", "酱油", "蜂蜜", "料酒"], category: "硬菜" },
+  { name: "黄焖鸡", emoji: "🍗", ingredients: ["鸡肉", "土豆", "蘑菇", "青椒", "姜"], category: "硬菜" },
+  { name: "辣子鸡", emoji: "🌶️", ingredients: ["鸡肉", "辣椒", "花椒", "蒜"], category: "川菜" },
+  { name: "椒麻鸡", emoji: "🍗", ingredients: ["鸡肉", "辣椒", "花椒", "葱"], category: "凉菜" },
+  { name: "凉拌鸡丝", emoji: "🍗", ingredients: ["鸡肉", "黄瓜", "醋", "蒜"], category: "凉菜" },
+  { name: "蜜汁鸡翅", emoji: "🍗", ingredients: ["鸡翅", "酱油", "蜂蜜"], category: "快手菜" },
+  { name: "啤酒鸭", emoji: "🦆", ingredients: ["鸭肉", "土豆", "辣椒", "姜", "酱油"], category: "硬菜" },
+  { name: "孜然羊肉", emoji: "🐑", ingredients: ["羊肉", "洋葱", "辣椒", "孜然"], category: "硬菜" },
+  { name: "滑蛋牛肉", emoji: "🥩", ingredients: ["牛肉", "鸡蛋", "葱"], category: "家常菜" },
+  { name: "蚝油牛肉", emoji: "🥩", ingredients: ["牛肉", "青椒", "洋葱", "酱油"], category: "家常菜" },
+  { name: "夫妻肺片", emoji: "🥩", ingredients: ["牛肉", "辣椒", "花椒", "酱油", "醋"], category: "凉菜" },
+  { name: "番茄鱼片", emoji: "🐟", ingredients: ["鱼", "番茄", "姜", "葱"], category: "硬菜" },
+  { name: "姜葱炒蟹", emoji: "🦀", ingredients: ["蟹", "姜", "葱", "蒜"], category: "海鲜" },
+  { name: "茄汁大虾", emoji: "🦐", ingredients: ["虾", "番茄", "蒜", "葱"], category: "海鲜" },
+  { name: "油焖大虾", emoji: "🦐", ingredients: ["虾", "姜", "葱", "酱油"], category: "海鲜" },
+  { name: "宫保虾球", emoji: "🦐", ingredients: ["虾", "花生", "辣椒", "洋葱"], category: "海鲜" },
+  { name: "小炒肉", emoji: "🥓", ingredients: ["猪肉", "辣椒", "蒜", "青椒"], category: "家常菜" },
+  { name: "腊肉炒蒜薹", emoji: "🥓", ingredients: ["蒜薹", "猪肉", "辣椒"], category: "家常菜" },
+  { name: "干锅花菜", emoji: "🥦", ingredients: ["西兰花", "猪肉", "辣椒", "蒜"], category: "家常菜" },
+  { name: "肉末茄子", emoji: "🍆", ingredients: ["茄子", "猪肉", "蒜", "酱油"], category: "家常菜" },
+  { name: "手撕包菜", emoji: "🥬", ingredients: ["白菜", "辣椒", "醋", "蒜"], category: "素菜" },
+  { name: "清炒时蔬", emoji: "🥬", ingredients: ["白菜", "蒜"], category: "素菜" },
+  { name: "砂锅豆腐", emoji: "🍲", ingredients: ["豆腐", "蘑菇", "白菜", "粉丝"], category: "汤羹" },
+  { name: "大酱汤", emoji: "🥘", ingredients: ["豆腐", "土豆", "西葫芦", "葱", "辣椒"], category: "日韩料理" },
+  { name: "泡菜炒饭", emoji: "🍚", ingredients: ["米饭", "鸡蛋", "辣椒", "葱"], category: "日韩料理" },
+  { name: "日式咖喱", emoji: "🍛", ingredients: ["土豆", "胡萝卜", "洋葱", "鸡肉"], category: "日韩料理" },
+  { name: "冬阴功汤", emoji: "🥘", ingredients: ["虾", "蘑菇", "辣椒", "番茄", "葱"], category: "日韩料理" },
+  { name: "寿司", emoji: "🍣", ingredients: ["米饭", "黄瓜", "鸡蛋", "蟹肉棒"], category: "日韩料理" },
+  { name: "铁板豆腐", emoji: "🧈", ingredients: ["豆腐", "葱", "辣椒", "酱油"], category: "快手菜" },
+  { name: "炖蛋", emoji: "🥚", ingredients: ["鸡蛋", "酱油"], category: "快手菜" },
+  { name: "土豆泥", emoji: "🥔", ingredients: ["土豆", "牛奶", "盐"], category: "快手菜" },
+  { name: "泡椒凤爪", emoji: "🐔", ingredients: ["鸡翅", "辣椒", "花椒", "醋"], category: "凉菜" },
+  { name: "双皮奶", emoji: "🍮", ingredients: ["牛奶", "鸡蛋", "糖"], category: "甜品" },
+  { name: "红糖糍粑", emoji: "🍡", ingredients: ["糯米", "红糖"], category: "甜品" },
+  { name: "桂花糯米藕", emoji: "🪷", ingredients: ["莲藕", "糯米", "桂花"], category: "甜品" },
+  { name: "银耳羹", emoji: "🥣", ingredients: ["银耳", "红枣", "糖"], category: "甜品" },
+  { name: "葡式蛋挞", emoji: "🥧", ingredients: ["鸡蛋", "牛奶", "糖"], category: "甜品" },
 ];
 
 // Derive all unique ingredients
-const ALL_INGREDIENTS = [...new Set(DISHES.flatMap(d => d.ingredients))].sort();
+function getAllDishes() {
+  const custom = JSON.parse(localStorage.getItem('customDishes') || '[]');
+  return [...DISHES, ...custom];
+}
+function getAllIngredients() {
+  return [...new Set(getAllDishes().flatMap(d => d.ingredients))].sort();
+}
+let ALL_INGREDIENTS = getAllIngredients();
 
 // ============================================================
 // STATE
@@ -818,6 +1122,11 @@ let diaryEntries = JSON.parse(localStorage.getItem('foodDiary') || '[]');
 let selectedIngredients = new Set();
 let currentFilterDate = null; // null = show all
 let currentTab = 'diary';
+let editingCustomDishId = null;
+let pendingPhotoDataUrl = null; // base64 of photo not yet saved
+
+const MEAL_LABELS = { breakfast: '早餐', lunch: '午餐', dinner: '晚餐', snack: '加餐' };
+const MEAL_EMOJI = { breakfast: '🌅', lunch: '☀️', dinner: '🌙', snack: '☕' };
 
 // ============================================================
 // UTILS
@@ -834,6 +1143,10 @@ function formatDate(dateStr) {
   return `${m}月${d}日 周${wd}`;
 }
 
+function formatMonth(monthStr) {
+  return monthStr.replace('-', '年') + '月';
+}
+
 function timeFromISO(iso) {
   return iso.slice(11, 16);
 }
@@ -843,9 +1156,6 @@ function escapeHTML(str) {
   div.textContent = str;
   return div.innerHTML;
 }
-
-const MEAL_LABELS = { breakfast: '早餐', lunch: '午餐', dinner: '晚餐', snack: '加餐' };
-const MEAL_EMOJI = { breakfast: '🌅', lunch: '☀️', dinner: '🌙', snack: '☕' };
 
 function saveEntries() {
   localStorage.setItem('foodDiary', JSON.stringify(diaryEntries));
@@ -861,6 +1171,58 @@ function toast(msg) {
 }
 
 // ============================================================
+// PHOTO STORAGE
+// ============================================================
+const PHOTO_KEY = 'foodPhotos';
+
+function getPhoto(entryId) {
+  const all = JSON.parse(localStorage.getItem(PHOTO_KEY) || '{}');
+  return all[entryId] || null;
+}
+
+function savePhoto(entryId, dataUrl) {
+  const all = JSON.parse(localStorage.getItem(PHOTO_KEY) || '{}');
+  all[entryId] = dataUrl;
+  localStorage.setItem(PHOTO_KEY, JSON.stringify(all));
+}
+
+function deletePhoto(entryId) {
+  const all = JSON.parse(localStorage.getItem(PHOTO_KEY) || '{}');
+  delete all[entryId];
+  localStorage.setItem(PHOTO_KEY, JSON.stringify(all));
+}
+
+function compressImage(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let { width, height } = img;
+        const max = 800;
+        if (width > height && width > max) { height *= max / width; width = max; }
+        else if (height > max) { width *= max / height; height = max; }
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.7));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function checkStorageQuota() {
+  const all = JSON.parse(localStorage.getItem(PHOTO_KEY) || '{}');
+  const photoBytes = Object.values(all).reduce((sum, b64) => sum + b64.length * 2, 0);
+  const totalBytes = new Blob([JSON.stringify(localStorage)]).size;
+  const limit = 5 * 1024 * 1024;
+  return { used: totalBytes, limit, percent: totalBytes / limit, photoCount: Object.keys(all).length, photoBytes };
+}
+
+// ============================================================
 // DIARY: Render
 // ============================================================
 function renderDiaryStats() {
@@ -873,10 +1235,13 @@ function renderDiaryStats() {
   const weekEntries = diaryEntries.filter(e => e.date >= weekAgoStr);
   const total = diaryEntries.length;
 
+  // Monthly spending
+  const thisMonth = today.slice(0, 7);
+  const monthExpenses = diaryEntries.filter(e => e.date.startsWith(thisMonth) && e.price);
+  const monthTotal = monthExpenses.reduce((sum, e) => sum + parseFloat(e.price || 0), 0);
+
   const weekFoods = {};
-  weekEntries.forEach(e => {
-    weekFoods[e.foodName] = (weekFoods[e.foodName] || 0) + 1;
-  });
+  weekEntries.forEach(e => { weekFoods[e.foodName] = (weekFoods[e.foodName] || 0) + 1; });
   let fav = '—';
   let maxC = 0;
   Object.entries(weekFoods).forEach(([name, c]) => { if (c > maxC) { maxC = c; fav = name; } });
@@ -885,6 +1250,7 @@ function renderDiaryStats() {
   document.getElementById('stat-week').textContent = weekEntries.length;
   document.getElementById('stat-total').textContent = total;
   document.getElementById('stat-fav').textContent = fav;
+  document.getElementById('stat-month-spend').textContent = monthTotal > 0 ? '¥' + monthTotal : '—';
 }
 
 function renderDiaryEntries() {
@@ -930,6 +1296,7 @@ function renderDiaryEntries() {
       items.forEach(e => {
         html += `
           <div class="entry-item">
+            ${e.hasPhoto ? `<img class="entry-photo-thumb" data-entry-id="${e.id}" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">` : ''}
             <span style="font-size:1.2rem;">🍜</span>
             <div style="flex:1;">
               <div class="food-name">${escapeHTML(e.foodName)}</div>
@@ -950,10 +1317,28 @@ function renderDiaryEntries() {
 
   container.innerHTML = html;
 
+  // Lazy-load photo thumbnails
+  container.querySelectorAll('.entry-photo-thumb').forEach(img => {
+    const id = img.dataset.entryId;
+    const dataUrl = getPhoto(id);
+    if (dataUrl) img.src = dataUrl;
+  });
+
+  // Bind thumbnail clicks → lightbox
+  container.querySelectorAll('.entry-photo-thumb').forEach(img => {
+    img.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const lightbox = document.getElementById('photo-lightbox');
+      document.getElementById('photo-lightbox-img').src = img.src;
+      lightbox.style.display = 'flex';
+    });
+  });
+
   // Bind delete buttons
   container.querySelectorAll('.entry-delete').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.dataset.id;
+      deletePhoto(id);
       diaryEntries = diaryEntries.filter(e => e.id !== id);
       saveEntries();
       refreshDiary();
@@ -992,7 +1377,6 @@ function renderIngredientGrid() {
   });
   grid.innerHTML = html;
 
-  // Bind clicks
   grid.querySelectorAll('.ingredient-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       const ing = chip.dataset.ingredient;
@@ -1013,7 +1397,7 @@ function findMatchingDishes() {
   const sel = Array.from(selectedIngredients);
   if (sel.length === 0) return [];
 
-  return DISHES.map(dish => {
+  return getAllDishes().map(dish => {
     const matched = dish.ingredients.filter(i => sel.includes(i));
     const missing = dish.ingredients.filter(i => !sel.includes(i));
     if (matched.length === 0) return null;
@@ -1024,7 +1408,6 @@ function findMatchingDishes() {
       matchRate: matched.length / dish.ingredients.length,
     };
   }).filter(Boolean).sort((a, b) => {
-    // Perfect matches first, then by match rate
     if (b.matchRate === 1 && a.matchRate !== 1) return 1;
     if (a.matchRate === 1 && b.matchRate !== 1) return -1;
     return b.matchRate - a.matchRate || a.name.localeCompare(b.name, 'zh');
@@ -1076,7 +1459,6 @@ function renderDishResults() {
   });
   container.innerHTML = html;
 
-  // Bind "add to diary" buttons
   container.querySelectorAll('.dish-add-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1103,6 +1485,7 @@ function addDishToDiary(dishName) {
     notes: '来自食材推荐',
     restaurant: '',
     price: '',
+    hasPhoto: false,
     createdAt: now.toISOString(),
   };
   diaryEntries.push(entry);
@@ -1113,14 +1496,250 @@ function addDishToDiary(dishName) {
 
 function randomIngredients() {
   selectedIngredients.clear();
-  // 随机选一道菜，然后选中这道菜的所有食材
-  const dish = DISHES[Math.floor(Math.random() * DISHES.length)];
+  const all = getAllDishes();
+  const dish = all[Math.floor(Math.random() * all.length)];
   dish.ingredients.forEach(ing => selectedIngredients.add(ing));
   document.getElementById('ingredient-search').value = '';
   renderIngredientGrid();
   renderDishResults();
   toast(`🎲 随机出了「${dish.name}」，已选中 ${selectedIngredients.size} 种食材`);
 }
+
+// ============================================================
+// CUSTOM DISH CRUD
+// ============================================================
+function saveCustomDishes(dishes) {
+  localStorage.setItem('customDishes', JSON.stringify(dishes));
+  ALL_INGREDIENTS = getAllIngredients();
+}
+
+function renderCustomDishList() {
+  const container = document.getElementById('custom-dish-list');
+  const custom = JSON.parse(localStorage.getItem('customDishes') || '[]');
+  if (custom.length === 0) {
+    container.innerHTML = `<div style="color:var(--text-lighter);font-size:0.85rem;padding:8px 0;">还没有自定义菜肴，点"添加自定义菜"开始</div>`;
+    return;
+  }
+  let html = '';
+  custom.forEach((d, idx) => {
+    html += `
+      <div class="custom-dish-item">
+        <span class="dish-emoji">${d.emoji}</span>
+        <span class="dish-name">${escapeHTML(d.name)}</span>
+        <span class="dish-meta">${d.category} · ${d.ingredients.length}种食材</span>
+        <div class="custom-dish-actions">
+          <button class="edit-btn" data-idx="${idx}" title="编辑">✏️</button>
+          <button class="delete-btn" data-idx="${idx}" title="删除">🗑️</button>
+        </div>
+      </div>`;
+  });
+  container.innerHTML = html;
+
+  container.querySelectorAll('.edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx);
+      const custom = JSON.parse(localStorage.getItem('customDishes') || '[]');
+      const dish = custom[idx];
+      if (!dish) return;
+      document.getElementById('custom-dish-name').value = dish.name;
+      document.getElementById('custom-dish-emoji').value = dish.emoji;
+      document.getElementById('custom-dish-category').value = dish.category;
+      document.getElementById('custom-dish-ingredients').value = dish.ingredients.join(', ');
+      editingCustomDishId = idx;
+      document.getElementById('custom-dish-form').style.display = 'block';
+    });
+  });
+
+  container.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.idx);
+      let custom = JSON.parse(localStorage.getItem('customDishes') || '[]');
+      custom.splice(idx, 1);
+      saveCustomDishes(custom);
+      renderCustomDishList();
+      renderIngredientGrid();
+      renderDishResults();
+      toast('已删除自定义菜肴');
+    });
+  });
+}
+
+// ============================================================
+// STATISTICS
+// ============================================================
+function computeMonthlyStats() {
+  const months = {};
+  diaryEntries.forEach(e => {
+    const m = e.date.slice(0, 7);
+    if (!months[m]) months[m] = { count: 0, totalSpending: 0, entries: [] };
+    months[m].count++;
+    if (e.price) months[m].totalSpending += parseFloat(e.price) || 0;
+    months[m].entries.push(e);
+  });
+  return Object.entries(months).sort((a, b) => b[0].localeCompare(a[0])).map(([month, data]) => ({
+    month, count: data.count, totalSpending: data.totalSpending,
+    avgSpending: data.count > 0 ? (data.totalSpending / data.count) : 0,
+  }));
+}
+
+function computeRestaurantStats() {
+  const counts = {};
+  diaryEntries.forEach(e => {
+    if (!e.restaurant) return;
+    counts[e.restaurant] = (counts[e.restaurant] || 0) + 1;
+  });
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
+}
+
+function computePriceDistribution() {
+  const ranges = [
+    { label: '< ¥20', min: 0, max: 20, count: 0 },
+    { label: '¥20-50', min: 20, max: 50, count: 0 },
+    { label: '¥50-100', min: 50, max: 100, count: 0 },
+    { label: '≥ ¥100', min: 100, max: Infinity, count: 0 },
+  ];
+  diaryEntries.forEach(e => {
+    if (!e.price) return;
+    const p = parseFloat(e.price) || 0;
+    const range = ranges.find(r => p >= r.min && p < r.max);
+    if (range) range.count++;
+  });
+  return ranges;
+}
+
+function renderStats() {
+  // Monthly
+  const monthly = computeMonthlyStats();
+  let mhtml = '';
+  if (monthly.length === 0) {
+    mhtml = `<div class="empty-state" style="padding:20px;"><div class="icon">📅</div><p>还没有饮食记录</p></div>`;
+  } else {
+    mhtml = `<div style="overflow-x:auto;"><table class="stats-table"><tr><th>月份</th><th>餐数</th><th>总花费</th><th>平均</th></tr>`;
+    monthly.forEach(m => {
+      mhtml += `<tr><td>${formatMonth(m.month)}</td><td>${m.count}</td><td>${m.totalSpending > 0 ? '¥' + m.totalSpending.toFixed(0) : '—'}</td><td>${m.avgSpending > 0 ? '¥' + m.avgSpending.toFixed(0) : '—'}</td></tr>`;
+    });
+    mhtml += `</table></div>`;
+  }
+  document.getElementById('stats-monthly').innerHTML = mhtml;
+
+  // Restaurants
+  const restaurants = computeRestaurantStats();
+  let rhtml = '';
+  if (restaurants.length === 0) {
+    rhtml = `<div class="empty-state" style="padding:20px;"><div class="icon">🏠</div><p>还没有餐厅记录</p></div>`;
+  } else {
+    rhtml = `<div style="overflow-x:auto;"><table class="stats-table"><tr><th>#</th><th>餐厅</th><th>光顾次数</th></tr>`;
+    restaurants.forEach((r, i) => {
+      const cls = i === 0 ? 'stats-rank-1' : i === 1 ? 'stats-rank-2' : i === 2 ? 'stats-rank-3' : '';
+      rhtml += `<tr><td><span class="stats-rank-num ${cls}">${i+1}</span></td><td>📍 ${escapeHTML(r.name)}</td><td>${r.count}</td></tr>`;
+    });
+    rhtml += `</table></div>`;
+  }
+  document.getElementById('stats-restaurants').innerHTML = rhtml;
+
+  // Prices
+  const prices = computePriceDistribution();
+  let phtml = '';
+  const totalWithPrice = prices.reduce((s, r) => s + r.count, 0);
+  if (totalWithPrice === 0) {
+    phtml = `<div class="empty-state" style="padding:20px;"><div class="icon">💰</div><p>还没有价格记录</p></div>`;
+  } else {
+    phtml = `<div style="overflow-x:auto;"><table class="stats-table"><tr><th>价格区间</th><th>次数</th><th>占比</th></tr>`;
+    prices.forEach(r => {
+      const pct = totalWithPrice > 0 ? (r.count / totalWithPrice * 100).toFixed(0) : 0;
+      phtml += `<tr><td>${r.label}</td><td>${r.count}</td><td>${pct}%</td></tr>`;
+    });
+    phtml += `</table></div>`;
+  }
+  document.getElementById('stats-prices').innerHTML = phtml;
+
+  // Storage
+  const quota = checkStorageQuota();
+  const pct = Math.min(quota.percent * 100, 100);
+  const barClass = pct > 90 ? 'danger' : pct > 70 ? 'warning' : '';
+  document.getElementById('stats-storage').innerHTML = `
+    <div style="font-size:0.9rem;margin-bottom:8px;">
+      照片: ${quota.photoCount} 张 · 已用 ${(quota.used / 1024 / 1024).toFixed(1)}MB / ${(quota.limit / 1024 / 1024).toFixed(0)}MB
+      ${quota.photoCount === 0 ? '<span style="color:var(--text-lighter);">（上传照片后可查看用量）</span>' : ''}
+    </div>
+    <div class="storage-bar"><div class="storage-bar-fill ${barClass}" style="width:${pct}%;"></div></div>
+    ${pct > 90 ? '<div style="color:var(--red);font-size:0.85rem;margin-top:4px;">⚠️ 存储空间不足，请删除一些照片</div>' : pct > 70 ? '<div style="color:var(--yellow);font-size:0.85rem;margin-top:4px;">⚠️ 存储空间快满了</div>' : ''}
+  `;
+}
+
+// ============================================================
+// SHARE CARD
+// ============================================================
+function openShareModal(entry) {
+  const modal = document.getElementById('share-modal');
+  const preview = document.getElementById('share-card-preview');
+  const mealEmoji = MEAL_EMOJI[entry.mealType] || '🍜';
+  const mealLabel = MEAL_LABELS[entry.mealType] || '';
+  const photo = entry.hasPhoto ? getPhoto(entry.id) : null;
+
+  preview.innerHTML = `
+    ${photo ? `<div style="margin-bottom:12px;"><img src="${photo}" style="max-width:100%;max-height:200px;border-radius:12px;object-fit:cover;"></div>` : ''}
+    <div class="card-header">🥢 吃了吗 · ${mealLabel}</div>
+    <div class="card-dish">${escapeHTML(entry.foodName)}</div>
+    <div class="card-info">
+      ${entry.restaurant ? `<span>📍 ${escapeHTML(entry.restaurant)}</span>` : ''}
+      ${entry.price ? `<span>💰 ¥${escapeHTML(entry.price)}/人</span>` : ''}
+    </div>
+    ${(!entry.restaurant && !entry.price && entry.notes) ? `<div class="card-info"><span>${escapeHTML(entry.notes)}</span></div>` : ''}
+    <div class="card-footer">${formatDate(entry.date)}</div>
+  `;
+  modal.style.display = 'flex';
+
+  document.getElementById('btn-copy-share').onclick = () => {
+    const parts = ['🥢 吃了吗'];
+    parts.push(`${mealEmoji} ${mealLabel}：${entry.foodName}`);
+    if (entry.restaurant) parts.push(`📍 ${entry.restaurant}`);
+    if (entry.price) parts.push(`💰 ¥${entry.price}/人`);
+    if (entry.notes) parts.push(`📝 ${entry.notes}`);
+    parts.push(`📅 ${formatDate(entry.date)}`);
+    navigator.clipboard.writeText(parts.join('\n')).then(() => {
+      toast('已复制到剪贴板 📋');
+      modal.style.display = 'none';
+    }).catch(() => toast('复制失败'));
+  };
+
+  document.getElementById('btn-share-native').onclick = () => {
+    const text = [
+      `🥢 吃了吗`,
+      `${mealEmoji} ${mealLabel}：${entry.foodName}`,
+      entry.restaurant ? `📍 ${entry.restaurant}` : '',
+      entry.price ? `💰 ¥${entry.price}/人` : '',
+      `📅 ${formatDate(entry.date)}`,
+    ].filter(Boolean).join('\n');
+
+    if (navigator.share) {
+      navigator.share({ title: '吃了吗 - ' + entry.foodName, text }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(text).then(() => toast('已复制到剪贴板 📋')).catch(() => toast('分享失败'));
+    }
+    modal.style.display = 'none';
+  };
+}
+
+// Close share modal
+document.getElementById('share-modal-close').addEventListener('click', () => {
+  document.getElementById('share-modal').style.display = 'none';
+});
+document.getElementById('share-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('share-modal')) {
+    document.getElementById('share-modal').style.display = 'none';
+  }
+});
+
+// Close lightbox
+document.getElementById('photo-lightbox-close').addEventListener('click', () => {
+  document.getElementById('photo-lightbox').style.display = 'none';
+});
+document.getElementById('photo-lightbox').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('photo-lightbox')) {
+    document.getElementById('photo-lightbox').style.display = 'none';
+  }
+});
 
 // ============================================================
 // EVENT HANDLERS
@@ -1134,7 +1753,35 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.add('active');
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.getElementById('panel-' + currentTab).classList.add('active');
+    if (currentTab === 'stats') renderStats();
   });
+});
+
+// Photo file input
+document.getElementById('entry-photo-input').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const quota = checkStorageQuota();
+  if (quota.percent > 0.9) {
+    toast('存储空间不足，请删除一些照片后重试');
+    e.target.value = '';
+    return;
+  }
+  pendingPhotoDataUrl = await compressImage(file);
+  const preview = document.getElementById('photo-preview');
+  preview.classList.add('show');
+  document.getElementById('photo-preview-img').src = pendingPhotoDataUrl;
+  document.getElementById('photo-upload-text').textContent = '✅ 已选择';
+  document.getElementById('photo-upload-label').classList.add('has-photo');
+});
+
+// Remove photo
+document.getElementById('photo-preview-remove').addEventListener('click', () => {
+  pendingPhotoDataUrl = null;
+  document.getElementById('entry-photo-input').value = '';
+  document.getElementById('photo-preview').classList.remove('show');
+  document.getElementById('photo-upload-text').textContent = '📷 拍照或选择照片';
+  document.getElementById('photo-upload-label').classList.remove('has-photo');
 });
 
 // Add entry
@@ -1148,16 +1795,25 @@ document.getElementById('btn-add-entry').addEventListener('click', () => {
 
   if (!foodName) { toast('请输入食物名称'); return; }
 
+  const id = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
   const entry = {
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    id,
     date,
     mealType,
     foodName,
     notes,
     restaurant: restaurant || '',
     price: price || '',
+    hasPhoto: !!pendingPhotoDataUrl,
     createdAt: new Date().toISOString(),
   };
+  if (pendingPhotoDataUrl) {
+    savePhoto(id, pendingPhotoDataUrl);
+    pendingPhotoDataUrl = null;
+    document.getElementById('photo-preview').classList.remove('show');
+    document.getElementById('photo-upload-text').textContent = '📷 拍照或选择照片';
+    document.getElementById('photo-upload-label').classList.remove('has-photo');
+  }
   diaryEntries.push(entry);
   saveEntries();
   document.getElementById('entry-food').value = '';
@@ -1209,67 +1865,51 @@ document.getElementById('entry-food').addEventListener('keydown', (e) => {
 });
 
 // ============================================================
-// SHARE CARD
+// CUSTOM DISH EVENT HANDLERS
 // ============================================================
-function openShareModal(entry) {
-  const modal = document.getElementById('share-modal');
-  const preview = document.getElementById('share-card-preview');
-  const mealEmoji = MEAL_EMOJI[entry.mealType] || '🍜';
-  const mealLabel = MEAL_LABELS[entry.mealType] || '';
-
-  preview.innerHTML = `
-    <div class="card-header">🥢 吃了吗 · ${mealLabel}</div>
-    <div class="card-dish">${escapeHTML(entry.foodName)}</div>
-    <div class="card-info">
-      ${entry.restaurant ? `<span>📍 ${escapeHTML(entry.restaurant)}</span>` : ''}
-      ${entry.price ? `<span>💰 ¥${escapeHTML(entry.price)}/人</span>` : ''}
-    </div>
-    ${(!entry.restaurant && !entry.price) ? `<div class="card-info"><span>${escapeHTML(entry.notes || '享受美食的快乐 ✨')}</span></div>` : ''}
-    <div class="card-footer">${formatDate(entry.date)}</div>
-  `;
-  modal.style.display = 'flex';
-
-  // Copy button
-  document.getElementById('btn-copy-share').onclick = () => {
-    const parts = ['🥢 吃了吗'];
-    parts.push(`${mealEmoji} ${mealLabel}：${entry.foodName}`);
-    if (entry.restaurant) parts.push(`📍 ${entry.restaurant}`);
-    if (entry.price) parts.push(`💰 ¥${entry.price}/人`);
-    if (entry.notes) parts.push(`📝 ${entry.notes}`);
-    parts.push(`📅 ${formatDate(entry.date)}`);
-    navigator.clipboard.writeText(parts.join('\n')).then(() => {
-      toast('已复制到剪贴板 📋');
-      modal.style.display = 'none';
-    }).catch(() => toast('复制失败'));
-  };
-
-  // Native share
-  document.getElementById('btn-share-native').onclick = () => {
-    const text = [
-      `🥢 吃了吗`,
-      `${mealEmoji} ${mealLabel}：${entry.foodName}`,
-      entry.restaurant ? `📍 ${entry.restaurant}` : '',
-      entry.price ? `💰 ¥${entry.price}/人` : '',
-      `📅 ${formatDate(entry.date)}`,
-    ].filter(Boolean).join('\n');
-
-    if (navigator.share) {
-      navigator.share({ title: '吃了吗 - ' + entry.foodName, text }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(text).then(() => toast('已复制到剪贴板 📋')).catch(() => toast('分享失败'));
-    }
-    modal.style.display = 'none';
-  };
-}
-
-// Close share modal
-document.getElementById('share-modal-close').addEventListener('click', () => {
-  document.getElementById('share-modal').style.display = 'none';
+document.getElementById('btn-show-custom-form').addEventListener('click', () => {
+  editingCustomDishId = null;
+  document.getElementById('custom-dish-form').style.display = 'block';
+  document.getElementById('custom-dish-name').value = '';
+  document.getElementById('custom-dish-emoji').value = '🍽️';
+  document.getElementById('custom-dish-category').value = '家常菜';
+  document.getElementById('custom-dish-ingredients').value = '';
 });
-document.getElementById('share-modal').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('share-modal')) {
-    document.getElementById('share-modal').style.display = 'none';
+document.getElementById('btn-cancel-custom-dish').addEventListener('click', () => {
+  document.getElementById('custom-dish-form').style.display = 'none';
+  editingCustomDishId = null;
+});
+document.getElementById('btn-save-custom-dish').addEventListener('click', () => {
+  const name = document.getElementById('custom-dish-name').value.trim();
+  const emoji = document.getElementById('custom-dish-emoji').value.trim() || '🍽️';
+  const category = document.getElementById('custom-dish-category').value;
+  const ingredientsStr = document.getElementById('custom-dish-ingredients').value.trim();
+  const ingredients = ingredientsStr.split(/[,，]/).map(s => s.trim()).filter(Boolean);
+
+  if (!name) { toast('请输入菜名'); return; }
+  if (ingredients.length === 0) { toast('请至少输入一个食材'); return; }
+
+  // Check duplicates (exclude current editing dish)
+  const allDishes = getAllDishes();
+  const duplicate = allDishes.some((d, i) => d.name === name && i !== editingCustomDishId);
+  if (duplicate) { toast(`「${name}」已存在`); return; }
+
+  let custom = JSON.parse(localStorage.getItem('customDishes') || '[]');
+  const dish = { name, emoji, ingredients, category };
+
+  if (editingCustomDishId !== null) {
+    custom[editingCustomDishId] = dish;
+    toast(`已更新「${name}」`);
+  } else {
+    custom.push(dish);
+    toast(`已添加自定义菜「${name}」`);
   }
+  saveCustomDishes(custom);
+  document.getElementById('custom-dish-form').style.display = 'none';
+  editingCustomDishId = null;
+  renderCustomDishList();
+  renderIngredientGrid();
+  renderDishResults();
 });
 
 // ============================================================
@@ -1282,6 +1922,7 @@ function init() {
   renderIngredientGrid();
   renderDishResults();
   refreshDiary();
+  renderCustomDishList();
 
   // Focus food input when switching to diary
   document.querySelector('[data-tab="diary"]').addEventListener('click', () => {
