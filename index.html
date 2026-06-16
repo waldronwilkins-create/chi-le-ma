@@ -424,6 +424,137 @@ body {
 }
 .dish-add-btn:hover { background: var(--orange); color: white; }
 
+/* ===== Entry Meta (restaurant + price) ===== */
+.entry-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  align-items: center;
+}
+.entry-meta .meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--white);
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.entry-meta .meta-tag.price { color: #D35400; border-color: #FDEBD0; background: #FFF8F0; }
+
+/* ===== Share Button on Entry ===== */
+.share-entry-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  color: var(--text-lighter);
+}
+.share-entry-btn:hover { background: var(--orange-light); color: var(--orange); }
+
+/* ===== Share Modal ===== */
+.share-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+  padding: 16px;
+}
+.share-modal {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: scaleIn 0.25s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+.share-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.share-modal-close:hover { background: #e0e0e0; }
+.share-card-preview {
+  background: linear-gradient(135deg, #FF6B35 0%, #E85D2C 100%);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  color: white;
+  text-align: center;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.share-card-preview::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+.share-card-preview .card-header {
+  font-size: 1.1rem;
+  font-weight: 700;
+  opacity: 0.9;
+  margin-bottom: 12px;
+}
+.share-card-preview .card-dish {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: 0.03em;
+}
+.share-card-preview .card-info {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.share-card-preview .card-info span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.share-card-preview .card-footer {
+  margin-top: 14px;
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+.share-actions {
+  display: flex;
+  gap: 8px;
+}
+.share-actions .btn { flex: 1; justify-content: center; }
+
 /* ===== Toast ===== */
 .toast-container {
   position: fixed;
@@ -531,9 +662,19 @@ body {
           <input type="text" id="entry-food" placeholder="例如：番茄炒蛋、炸酱面…" autocomplete="off">
         </div>
       </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>🏠 餐厅（可选）</label>
+          <input type="text" id="entry-restaurant" placeholder="在哪吃的？例如：老王家牛肉面…" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label>💰 人均价格（可选）</label>
+          <input type="number" id="entry-price" placeholder="¥ 人均消费" min="0" step="0.01" autocomplete="off">
+        </div>
+      </div>
       <div class="form-group" style="margin-bottom:12px">
         <label>📝 备注（可选）</label>
-        <input type="text" id="entry-notes" placeholder="口味、份量、餐厅…">
+        <input type="text" id="entry-notes" placeholder="口味、份量…">
       </div>
       <button class="btn btn-primary btn-full" id="btn-add-entry">✅ 记录这一餐</button>
     </div>
@@ -581,6 +722,21 @@ body {
     </div>
   </section>
 
+</div>
+
+<!-- Share Modal -->
+<div class="share-modal-overlay" id="share-modal" style="display:none;">
+  <div class="share-modal">
+    <div style="position:relative;">
+      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:16px;text-align:center;">📤 分享这一餐</h3>
+      <button class="share-modal-close" id="share-modal-close" style="position:absolute;top:-8px;right:-8px;">✕</button>
+    </div>
+    <div class="share-card-preview" id="share-card-preview"></div>
+    <div class="share-actions">
+      <button class="btn btn-primary" id="btn-copy-share">📋 复制内容</button>
+      <button class="btn btn-outline" id="btn-share-native">📱 系统分享</button>
+    </div>
+  </div>
 </div>
 
 <!-- Toast Container -->
@@ -777,9 +933,14 @@ function renderDiaryEntries() {
             <span style="font-size:1.2rem;">🍜</span>
             <div style="flex:1;">
               <div class="food-name">${escapeHTML(e.foodName)}</div>
-              ${e.notes ? `<div class="food-notes">${escapeHTML(e.notes)}</div>` : ''}
+              <div class="entry-meta">
+                ${e.restaurant ? `<span class="meta-tag">📍 ${escapeHTML(e.restaurant)}</span>` : ''}
+                ${e.price ? `<span class="meta-tag price">💰 ¥${escapeHTML(e.price)}/人</span>` : ''}
+                ${e.notes ? `<span class="food-notes" style="margin-top:0;">${escapeHTML(e.notes)}</span>` : ''}
+              </div>
             </div>
             <span class="entry-time">${timeFromISO(e.createdAt)}</span>
+            <button class="share-entry-btn" data-id="${e.id}" title="分享">📤</button>
             <button class="entry-delete" data-id="${e.id}" title="删除">🗑️</button>
           </div>`;
       });
@@ -797,6 +958,16 @@ function renderDiaryEntries() {
       saveEntries();
       refreshDiary();
       toast('已删除记录');
+    });
+  });
+
+  // Bind share buttons
+  container.querySelectorAll('.share-entry-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      const entry = diaryEntries.find(e => e.id === id);
+      if (entry) openShareModal(entry);
     });
   });
 }
@@ -930,6 +1101,8 @@ function addDishToDiary(dishName) {
     mealType,
     foodName: dishName,
     notes: '来自食材推荐',
+    restaurant: '',
+    price: '',
     createdAt: now.toISOString(),
   };
   diaryEntries.push(entry);
@@ -970,6 +1143,8 @@ document.getElementById('btn-add-entry').addEventListener('click', () => {
   const mealType = document.getElementById('entry-meal-type').value;
   const foodName = document.getElementById('entry-food').value.trim();
   const notes = document.getElementById('entry-notes').value.trim();
+  const restaurant = document.getElementById('entry-restaurant').value.trim();
+  const price = document.getElementById('entry-price').value.trim();
 
   if (!foodName) { toast('请输入食物名称'); return; }
 
@@ -979,12 +1154,16 @@ document.getElementById('btn-add-entry').addEventListener('click', () => {
     mealType,
     foodName,
     notes,
+    restaurant: restaurant || '',
+    price: price || '',
     createdAt: new Date().toISOString(),
   };
   diaryEntries.push(entry);
   saveEntries();
   document.getElementById('entry-food').value = '';
   document.getElementById('entry-notes').value = '';
+  document.getElementById('entry-restaurant').value = '';
+  document.getElementById('entry-price').value = '';
   refreshDiary();
   toast(`已记录「${foodName}」✅`);
 });
@@ -1027,6 +1206,70 @@ document.getElementById('btn-select-all').addEventListener('click', () => {
 // Enter key in food input
 document.getElementById('entry-food').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') document.getElementById('btn-add-entry').click();
+});
+
+// ============================================================
+// SHARE CARD
+// ============================================================
+function openShareModal(entry) {
+  const modal = document.getElementById('share-modal');
+  const preview = document.getElementById('share-card-preview');
+  const mealEmoji = MEAL_EMOJI[entry.mealType] || '🍜';
+  const mealLabel = MEAL_LABELS[entry.mealType] || '';
+
+  preview.innerHTML = `
+    <div class="card-header">🥢 吃了吗 · ${mealLabel}</div>
+    <div class="card-dish">${escapeHTML(entry.foodName)}</div>
+    <div class="card-info">
+      ${entry.restaurant ? `<span>📍 ${escapeHTML(entry.restaurant)}</span>` : ''}
+      ${entry.price ? `<span>💰 ¥${escapeHTML(entry.price)}/人</span>` : ''}
+    </div>
+    ${(!entry.restaurant && !entry.price) ? `<div class="card-info"><span>${escapeHTML(entry.notes || '享受美食的快乐 ✨')}</span></div>` : ''}
+    <div class="card-footer">${formatDate(entry.date)}</div>
+  `;
+  modal.style.display = 'flex';
+
+  // Copy button
+  document.getElementById('btn-copy-share').onclick = () => {
+    const parts = ['🥢 吃了吗'];
+    parts.push(`${mealEmoji} ${mealLabel}：${entry.foodName}`);
+    if (entry.restaurant) parts.push(`📍 ${entry.restaurant}`);
+    if (entry.price) parts.push(`💰 ¥${entry.price}/人`);
+    if (entry.notes) parts.push(`📝 ${entry.notes}`);
+    parts.push(`📅 ${formatDate(entry.date)}`);
+    navigator.clipboard.writeText(parts.join('\n')).then(() => {
+      toast('已复制到剪贴板 📋');
+      modal.style.display = 'none';
+    }).catch(() => toast('复制失败'));
+  };
+
+  // Native share
+  document.getElementById('btn-share-native').onclick = () => {
+    const text = [
+      `🥢 吃了吗`,
+      `${mealEmoji} ${mealLabel}：${entry.foodName}`,
+      entry.restaurant ? `📍 ${entry.restaurant}` : '',
+      entry.price ? `💰 ¥${entry.price}/人` : '',
+      `📅 ${formatDate(entry.date)}`,
+    ].filter(Boolean).join('\n');
+
+    if (navigator.share) {
+      navigator.share({ title: '吃了吗 - ' + entry.foodName, text }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(text).then(() => toast('已复制到剪贴板 📋')).catch(() => toast('分享失败'));
+    }
+    modal.style.display = 'none';
+  };
+}
+
+// Close share modal
+document.getElementById('share-modal-close').addEventListener('click', () => {
+  document.getElementById('share-modal').style.display = 'none';
+});
+document.getElementById('share-modal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('share-modal')) {
+    document.getElementById('share-modal').style.display = 'none';
+  }
 });
 
 // ============================================================
