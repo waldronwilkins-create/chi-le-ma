@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>吃了吗 —— 饮食记录 & 食材挑选</title>
+<style>
+/* ===== CSS Variables ===== */
+:root {
+  --orange: #FF6B35;
+  --orange-light: #FFF0E8;
+  --peach: #F7C59F;
+  --cream: #FFF8F0;
+  --white: #FFFFFF;
+  --text: #2D2D2D;
+  --text-light: #6B6B6B;
+  --text-lighter: #999;
+  --teal: #4ECDC4;
+  --teal-light: #E8FAF8;
+  --green: #2ECC71;
+  --green-light: #E8F8EF;
+  --red: #E74C3C;
+  --red-light: #FDEDEC;
+  --yellow: #F39C12;
+  --yellow-light: #FEF9E7;
+  --border: #F0E8E0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #FFF5ED 0%, #FFF8F0 50%, #FFF0E5 100%);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Header ===== */
+.header {
+  background: linear-gradient(135deg, #FF6B35 0%, #F7934C 50%, #E85D2C 100%);
+  color: white;
+  padding: 28px 24px 24px;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(255,107,53,0.25);
+}
+.header h1 { font-size: 2rem; font-weight: 700; letter-spacing: 0.05em; }
+.header .subtitle { font-size: 0.95rem; opacity: 0.85; margin-top: 4px; font-weight: 400; }
+
+/* ===== Container ===== */
+.container { max-width: 800px; margin: 0 auto; padding: 20px 16px 40px; }
+
+/* ===== Tabs ===== */
+.tabs {
+  display: flex;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 5px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  position: sticky;
+  top: 12px;
+  z-index: 10;
+}
+.tab-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  border-radius: calc(var(--radius-xl) - 5px);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-light);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  background: var(--orange);
+  color: white;
+  box-shadow: 0 2px 8px rgba(255,107,53,0.35);
+}
+.tab-btn:hover:not(.active) { color: var(--orange); background: var(--orange-light); }
+
+/* ===== Panels ===== */
+.panel { display: none; }
+.panel.active { display: block; animation: fadeSlideIn 0.35s ease; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Cards ===== */
+.card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ===== Form ===== */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.form-row.triple { grid-template-columns: 1fr 1fr 1fr; }
+.form-group { display: flex; flex-direction: column; gap: 4px; }
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: var(--transition);
+  background: var(--cream);
+  color: var(--text);
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--orange);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+}
+.form-group textarea { resize: vertical; min-height: 60px; }
+
+/* ===== Buttons ===== */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--orange); color: white; box-shadow: 0 2px 8px rgba(255,107,53,0.3); }
+.btn-primary:hover { background: #E85D2C; box-shadow: 0 4px 12px rgba(255,107,53,0.4); }
+.btn-outline {
+  background: var(--white);
+  color: var(--orange);
+  border: 2px solid var(--orange);
+}
+.btn-outline:hover { background: var(--orange-light); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-light);
+  border: 1px solid transparent;
+}
+.btn-ghost:hover { background: #f5f5f5; border-color: #e0e0e0; }
+.btn-sm { padding: 6px 12px; font-size: 0.85rem; border-radius: 6px; }
+.btn-danger { color: var(--red); }
+.btn-danger:hover { background: var(--red-light); border-color: var(--red); }
+.btn-teal { background: var(--teal); color: white; }
+.btn-teal:hover { background: #3CBDB5; }
+.btn-full { width: 100%; justify-content: center; }
+
+/* ===== Diary Entries ===== */
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.date-filter input[type="date"] {
+  padding: 8px 12px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: var(--white);
+  outline: none;
+}
+.date-filter input[type="date"]:focus { border-color: var(--orange); }
+
+.meal-section { margin-bottom: 16px; }
+.meal-section-header {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-light);
+  padding: 8px 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.meal-badge {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  display: inline-block;
+}
+.meal-badge.breakfast { background: #FEF9E7; color: #B7950B; }
+.meal-badge.lunch { background: #FDEBD0; color: #B9770E; }
+.meal-badge.dinner { background: #E8DAEF; color: #7D3C98; }
+.meal-badge.snack { background: #D5F5E3; color: #1E8449; }
+
+.entry-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+.entry-item:hover { background: var(--white); border-color: var(--border); box-shadow: var(--shadow-sm); }
+.entry-item .food-name { flex: 1; font-weight: 600; font-size: 0.95rem; }
+.entry-item .food-notes { font-size: 0.8rem; color: var(--text-lighter); margin-top: 2px; }
+.entry-item .entry-time { font-size: 0.78rem; color: var(--text-lighter); white-space: nowrap; }
+.entry-delete {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  color: var(--text-lighter);
+}
+.entry-delete:hover { background: var(--red-light); color: var(--red); }
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-lighter);
+}
+.empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+.empty-state p { font-size: 0.95rem; }
+
+/* ===== Stats Bar ===== */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.stat-item {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 14px 12px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+.stat-item .stat-count { font-size: 1.5rem; font-weight: 700; color: var(--orange); }
+.stat-item .stat-label { font-size: 0.78rem; color: var(--text-lighter); margin-top: 2px; }
+
+/* ===== Ingredient Picker ===== */
+.ingredient-search {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  margin-bottom: 12px;
+  transition: var(--transition);
+  background: var(--white);
+}
+.ingredient-search:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+}
+
+.ingredient-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.selected-count {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  font-weight: 600;
+  margin-left: auto;
+}
+.selected-count span { color: var(--orange); font-size: 1.1rem; }
+
+.ingredient-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 4px;
+}
+.ingredient-grid::-webkit-scrollbar { width: 6px; }
+.ingredient-grid::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+
+.ingredient-chip {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 2px solid var(--border);
+  background: var(--white);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition);
+  user-select: none;
+  white-space: nowrap;
+}
+.ingredient-chip:hover { border-color: var(--peach); background: #FFF5ED; }
+.ingredient-chip.selected {
+  background: var(--orange);
+  color: white;
+  border-color: var(--orange);
+  box-shadow: 0 2px 8px rgba(255,107,53,0.3);
+}
+.ingredient-chip.hidden { display: none; }
+
+/* ===== Dish Results ===== */
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.results-header h3 { font-size: 1rem; font-weight: 700; }
+
+.dish-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  border: 2px solid var(--border);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  overflow: hidden;
+}
+.dish-card:hover { border-color: var(--orange); box-shadow: var(--shadow); }
+.dish-card.perfect-match { border-left: 4px solid var(--green); }
+.dish-card.partial-match { border-left: 4px solid var(--yellow); }
+
+.dish-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.dish-emoji { font-size: 1.5rem; }
+.dish-name { font-weight: 700; font-size: 1rem; flex: 1; }
+.match-tag {
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+.match-tag.perfect { background: var(--green-light); color: #1E8449; }
+.match-tag.partial { background: var(--yellow-light); color: #B7950B; }
+
+.dish-ingredients { display: flex; flex-wrap: wrap; gap: 6px; }
+.dish-ingredient {
+  font-size: 0.78rem;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+.dish-ingredient.have { background: var(--green-light); color: #1E8449; }
+.dish-ingredient.missing { background: var(--red-light); color: #C0392B; }
+
+.dish-add-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--orange);
+  background: var(--white);
+  color: var(--orange);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: var(--transition);
+  font-family: inherit;
+  text-align: center;
+}
+.dish-add-btn:hover { background: var(--orange); color: white; }
+
+/* ===== Toast ===== */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  background: #2D2D2D;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 2s forwards;
+  pointer-events: auto;
+  text-align: center;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-12px); } }
+
+/* ===== Responsive ===== */
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.5rem; }
+  .header { padding: 20px 16px; }
+  .container { padding: 12px 10px 30px; }
+  .form-row { grid-template-columns: 1fr; }
+  .form-row.triple { grid-template-columns: 1fr; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .card { padding: 16px; }
+  .dish-card { padding: 12px 14px; }
+  .tabs { margin-bottom: 16px; }
+  .tab-btn { font-size: 0.9rem; padding: 10px 12px; }
+  .ingredient-grid { max-height: 220px; gap: 6px; }
+  .ingredient-chip { padding: 6px 10px; font-size: 0.82rem; }
+  .date-filter { flex-direction: column; align-items: stretch; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Header ===== -->
+<header class="header">
+  <h1>🥢 吃了吗</h1>
+  <p class="subtitle">记录每一餐 · 轻松选菜不纠结</p>
+</header>
+
+<!-- ===== Main Container ===== -->
+<div class="container">
+
+  <!-- Tabs -->
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="diary">📝 饮食记录</button>
+    <button class="tab-btn" data-tab="picker">🎲 食材挑选</button>
+  </nav>
+
+  <!-- ===== Panel 1: Food Diary ===== -->
+  <section class="panel active" id="panel-diary">
+
+    <!-- Stats -->
+    <div class="stats-bar" id="stats-bar">
+      <div class="stat-item">
+        <div class="stat-count" id="stat-today">0</div>
+        <div class="stat-label">今日记录</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-count" id="stat-week">0</div>
+        <div class="stat-label">本周记录</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-count" id="stat-total">0</div>
+        <div class="stat-label">总记录</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-count" id="stat-fav">—</div>
+        <div class="stat-label">本周最爱</div>
+      </div>
+    </div>
+
+    <!-- Add Entry Form -->
+    <div class="card">
+      <div class="card-title">✏️ 添加记录</div>
+      <div class="form-row triple">
+        <div class="form-group">
+          <label>📅 日期</label>
+          <input type="date" id="entry-date">
+        </div>
+        <div class="form-group">
+          <label>🍽️ 餐别</label>
+          <select id="entry-meal-type">
+            <option value="breakfast">🌅 早餐</option>
+            <option value="lunch">☀️ 午餐</option>
+            <option value="dinner">🌙 晚餐</option>
+            <option value="snack">☕ 加餐</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>🍜 食物名称</label>
+          <input type="text" id="entry-food" placeholder="例如：番茄炒蛋、炸酱面…" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px">
+        <label>📝 备注（可选）</label>
+        <input type="text" id="entry-notes" placeholder="口味、份量、餐厅…">
+      </div>
+      <button class="btn btn-primary btn-full" id="btn-add-entry">✅ 记录这一餐</button>
+    </div>
+
+    <!-- Date Filter -->
+    <div class="date-filter">
+      <input type="date" id="filter-date">
+      <button class="btn btn-outline btn-sm" id="btn-filter-today">📌 今天</button>
+      <button class="btn btn-ghost btn-sm" id="btn-filter-all">📋 全部记录</button>
+      <span style="font-size:0.85rem;color:var(--text-lighter);margin-left:auto;" id="filter-info"></span>
+    </div>
+
+    <!-- Entries List -->
+    <div id="diary-entries"></div>
+  </section>
+
+  <!-- ===== Panel 2: Ingredient Picker ===== -->
+  <section class="panel" id="panel-picker">
+
+    <!-- Ingredient Selection -->
+    <div class="card">
+      <div class="card-title">🧺 选择你手边的食材</div>
+      <input type="text" class="ingredient-search" id="ingredient-search" placeholder="🔍 搜索食材…">
+      <div class="ingredient-actions">
+        <button class="btn btn-primary btn-sm" id="btn-random">🎲 随机生成</button>
+        <button class="btn btn-outline btn-sm" id="btn-clear-ingredients">✕ 清空选择</button>
+        <button class="btn btn-ghost btn-sm" id="btn-select-all">☑ 全选</button>
+        <span class="selected-count">已选 <span id="selected-count-num">0</span> 种</span>
+      </div>
+      <div class="ingredient-grid" id="ingredient-grid"></div>
+    </div>
+
+    <!-- Results -->
+    <div class="card" id="results-card">
+      <div class="results-header">
+        <h3>🍳 可做菜肴</h3>
+        <span style="font-size:0.85rem;color:var(--text-lighter);" id="results-count"></span>
+      </div>
+      <div id="dish-results">
+        <div class="empty-state">
+          <div class="icon">👆</div>
+          <p>选择食材后，这里会显示可以做的菜</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// ============================================================
+// DATA: Ingredient → Dish Database
+// ============================================================
+const DISHES = [
+  { name: "番茄炒蛋", emoji: "🍳", ingredients: ["番茄", "鸡蛋"], category: "家常菜" },
+  { name: "蛋炒饭", emoji: "🍚", ingredients: ["鸡蛋", "米饭", "葱"], category: "主食" },
+  { name: "红烧肉", emoji: "🥩", ingredients: ["猪肉", "酱油", "姜", "料酒"], category: "硬菜" },
+  { name: "鱼香肉丝", emoji: "🥘", ingredients: ["猪肉", "木耳", "胡萝卜", "青椒", "辣椒"], category: "家常菜" },
+  { name: "青椒肉丝", emoji: "🫑", ingredients: ["猪肉", "青椒", "姜", "蒜"], category: "家常菜" },
+  { name: "回锅肉", emoji: "🥓", ingredients: ["猪肉", "蒜", "青椒", "辣椒"], category: "川菜" },
+  { name: "宫保鸡丁", emoji: "🍗", ingredients: ["鸡肉", "花生", "辣椒", "葱"], category: "川菜" },
+  { name: "红烧鸡块", emoji: "🍖", ingredients: ["鸡肉", "土豆", "酱油", "姜"], category: "硬菜" },
+  { name: "番茄牛腩", emoji: "🥫", ingredients: ["牛肉", "番茄", "土豆", "姜"], category: "硬菜" },
+  { name: "土豆炖牛肉", emoji: "🥔", ingredients: ["牛肉", "土豆", "胡萝卜"], category: "硬菜" },
+  { name: "青椒牛肉", emoji: "🫑", ingredients: ["牛肉", "青椒", "洋葱"], category: "家常菜" },
+  { name: "酸辣土豆丝", emoji: "🥔", ingredients: ["土豆", "辣椒", "醋", "青椒"], category: "家常菜" },
+  { name: "麻婆豆腐", emoji: "🧈", ingredients: ["豆腐", "猪肉", "辣椒", "花椒"], category: "川菜" },
+  { name: "家常豆腐", emoji: "🧈", ingredients: ["豆腐", "青椒", "木耳", "胡萝卜"], category: "家常菜" },
+  { name: "皮蛋豆腐", emoji: "🥚", ingredients: ["豆腐", "鸡蛋", "葱", "姜"], category: "凉菜" },
+  { name: "清蒸鱼", emoji: "🐟", ingredients: ["鱼", "姜", "葱", "料酒"], category: "硬菜" },
+  { name: "红烧鱼", emoji: "🐠", ingredients: ["鱼", "酱油", "姜", "蒜"], category: "硬菜" },
+  { name: "水煮鱼", emoji: "🌶️", ingredients: ["鱼", "辣椒", "花椒", "豆芽"], category: "川菜" },
+  { name: "白灼虾", emoji: "🦐", ingredients: ["虾", "姜", "葱"], category: "海鲜" },
+  { name: "蒜蓉虾", emoji: "🦐", ingredients: ["虾", "蒜", "粉丝"], category: "海鲜" },
+  { name: "椒盐虾", emoji: "🦞", ingredients: ["虾", "辣椒", "花椒", "蒜"], category: "海鲜" },
+  { name: "醋溜白菜", emoji: "🥬", ingredients: ["白菜", "醋", "辣椒", "蒜"], category: "素菜" },
+  { name: "鱼香茄子", emoji: "🍆", ingredients: ["茄子", "猪肉", "蒜", "辣椒"], category: "家常菜" },
+  { name: "红烧茄子", emoji: "🍆", ingredients: ["茄子", "蒜", "酱油"], category: "素菜" },
+  { name: "地三鲜", emoji: "🥗", ingredients: ["土豆", "茄子", "青椒"], category: "家常菜" },
+  { name: "干煸豆角", emoji: "🫛", ingredients: ["豆角", "辣椒", "花椒", "猪肉"], category: "家常菜" },
+  { name: "拍黄瓜", emoji: "🥒", ingredients: ["黄瓜", "蒜", "醋"], category: "凉菜" },
+  { name: "凉拌木耳", emoji: "🪵", ingredients: ["木耳", "黄瓜", "蒜", "醋"], category: "凉菜" },
+  { name: "洋葱炒蛋", emoji: "🧅", ingredients: ["洋葱", "鸡蛋"], category: "家常菜" },
+  { name: "胡萝卜炒肉", emoji: "🥕", ingredients: ["胡萝卜", "猪肉", "青椒"], category: "家常菜" },
+  { name: "炸酱面", emoji: "🍝", ingredients: ["面条", "猪肉", "黄瓜", "豆芽"], category: "主食" },
+  { name: "阳春面", emoji: "🍜", ingredients: ["面条", "葱", "酱油"], category: "主食" },
+  { name: "炒面", emoji: "🍝", ingredients: ["面条", "鸡蛋", "猪肉", "白菜"], category: "主食" },
+  { name: "番茄鸡蛋汤", emoji: "🍲", ingredients: ["番茄", "鸡蛋", "葱"], category: "汤羹" },
+  { name: "紫菜蛋花汤", emoji: "🥣", ingredients: ["紫菜", "鸡蛋", "葱"], category: "汤羹" },
+  { name: "冬瓜排骨汤", emoji: "🍖", ingredients: ["冬瓜", "猪肉", "姜"], category: "汤羹" },
+  { name: "西兰花炒虾仁", emoji: "🥦", ingredients: ["西兰花", "虾", "蒜"], category: "家常菜" },
+  { name: "芹菜炒肉", emoji: "🌿", ingredients: ["芹菜", "猪肉", "辣椒"], category: "家常菜" },
+  { name: "玉米排骨汤", emoji: "🌽", ingredients: ["玉米", "猪肉", "胡萝卜"], category: "汤羹" },
+  { name: "凉拌菠菜", emoji: "🥬", ingredients: ["菠菜", "蒜", "芝麻"], category: "凉菜" },
+  { name: "南瓜粥", emoji: "🎃", ingredients: ["南瓜", "米饭"], category: "主食" },
+  { name: "蘑菇炒肉", emoji: "🍄", ingredients: ["蘑菇", "猪肉", "青椒"], category: "家常菜" },
+  { name: "菌菇汤", emoji: "🍄", ingredients: ["蘑菇", "金针菇", "豆腐", "葱"], category: "汤羹" },
+  { name: "豆角焖面", emoji: "🍝", ingredients: ["豆角", "面条", "猪肉"], category: "主食" },
+  { name: "洋葱牛柳", emoji: "🧅", ingredients: ["牛肉", "洋葱", "青椒"], category: "家常菜" },
+  { name: "土豆烧排骨", emoji: "🥔", ingredients: ["土豆", "猪肉", "酱油", "姜"], category: "硬菜" },
+  { name: "粉丝煲", emoji: "🍲", ingredients: ["粉丝", "猪肉", "白菜", "蘑菇"], category: "家常菜" },
+  { name: "鸡蛋羹", emoji: "🥚", ingredients: ["鸡蛋", "葱"], category: "家常菜" },
+  { name: "煎蛋", emoji: "🍳", ingredients: ["鸡蛋"], category: "快手菜" },
+  { name: "蒜蓉西兰花", emoji: "🥦", ingredients: ["西兰花", "蒜"], category: "素菜" },
+  { name: "蚝油生菜", emoji: "🥬", ingredients: ["生菜", "蒜"], category: "素菜" },
+  { name: "海带排骨汤", emoji: "🫒", ingredients: ["海带", "猪肉", "姜"], category: "汤羹" },
+  { name: "年糕炒肉", emoji: "🧈", ingredients: ["年糕", "猪肉", "白菜"], category: "家常菜" },
+  { name: "白萝卜炖肉", emoji: "🥕", ingredients: ["白萝卜", "猪肉", "姜"], category: "汤羹" },
+  { name: "火腿炒蛋", emoji: "🍳", ingredients: ["火腿", "鸡蛋"], category: "快手菜" },
+  { name: "虎皮青椒", emoji: "🫑", ingredients: ["青椒", "蒜", "酱油", "醋"], category: "素菜" },
+  { name: "苦瓜炒蛋", emoji: "🥒", ingredients: ["苦瓜", "鸡蛋"], category: "家常菜" },
+  { name: "丝瓜蛋汤", emoji: "🥒", ingredients: ["丝瓜", "鸡蛋", "葱"], category: "汤羹" },
+  { name: "韭菜炒蛋", emoji: "🌿", ingredients: ["韭菜", "鸡蛋"], category: "家常菜" },
+];
+
+// Derive all unique ingredients
+const ALL_INGREDIENTS = [...new Set(DISHES.flatMap(d => d.ingredients))].sort();
+
+// ============================================================
+// STATE
+// ============================================================
+let diaryEntries = JSON.parse(localStorage.getItem('foodDiary') || '[]');
+let selectedIngredients = new Set();
+let currentFilterDate = null; // null = show all
+let currentTab = 'diary';
+
+// ============================================================
+// UTILS
+// ============================================================
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function formatDate(dateStr) {
+  const [y, m, d] = dateStr.split('-');
+  const weekdays = ['日','一','二','三','四','五','六'];
+  const wd = weekdays[new Date(dateStr).getDay()];
+  return `${m}月${d}日 周${wd}`;
+}
+
+function timeFromISO(iso) {
+  return iso.slice(11, 16);
+}
+
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+const MEAL_LABELS = { breakfast: '早餐', lunch: '午餐', dinner: '晚餐', snack: '加餐' };
+const MEAL_EMOJI = { breakfast: '🌅', lunch: '☀️', dinner: '🌙', snack: '☕' };
+
+function saveEntries() {
+  localStorage.setItem('foodDiary', JSON.stringify(diaryEntries));
+}
+
+function toast(msg) {
+  const container = document.getElementById('toast-container');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  container.appendChild(el);
+  setTimeout(() => el.remove(), 2400);
+}
+
+// ============================================================
+// DIARY: Render
+// ============================================================
+function renderDiaryStats() {
+  const today = todayStr();
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  const weekAgoStr = weekAgo.getFullYear() + '-' + String(weekAgo.getMonth()+1).padStart(2,'0') + '-' + String(weekAgo.getDate()).padStart(2,'0');
+
+  const todayEntries = diaryEntries.filter(e => e.date === today);
+  const weekEntries = diaryEntries.filter(e => e.date >= weekAgoStr);
+  const total = diaryEntries.length;
+
+  const weekFoods = {};
+  weekEntries.forEach(e => {
+    weekFoods[e.foodName] = (weekFoods[e.foodName] || 0) + 1;
+  });
+  let fav = '—';
+  let maxC = 0;
+  Object.entries(weekFoods).forEach(([name, c]) => { if (c > maxC) { maxC = c; fav = name; } });
+
+  document.getElementById('stat-today').textContent = todayEntries.length;
+  document.getElementById('stat-week').textContent = weekEntries.length;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-fav').textContent = fav;
+}
+
+function renderDiaryEntries() {
+  const container = document.getElementById('diary-entries');
+  const filterInfo = document.getElementById('filter-info');
+
+  let entries = [...diaryEntries].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+  if (currentFilterDate) {
+    entries = entries.filter(e => e.date === currentFilterDate);
+    filterInfo.textContent = `筛选: ${formatDate(currentFilterDate)} · ${entries.length} 条`;
+  } else {
+    filterInfo.textContent = `共 ${entries.length} 条记录`;
+  }
+
+  if (entries.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🍽️</div>
+        <p>${currentFilterDate ? '这一天还没有记录' : '还没有任何记录'}<br>添加你的第一餐吧！</p>
+      </div>`;
+    return;
+  }
+
+  // Group by date
+  const grouped = {};
+  entries.forEach(e => {
+    if (!grouped[e.date]) grouped[e.date] = {};
+    if (!grouped[e.date][e.mealType]) grouped[e.date][e.mealType] = [];
+    grouped[e.date][e.mealType].push(e);
+  });
+
+  const mealOrder = ['breakfast', 'lunch', 'dinner', 'snack'];
+
+  let html = '';
+  for (const [date, meals] of Object.entries(grouped).sort((a,b) => b[0].localeCompare(a[0]))) {
+    html += `<div style="font-weight:700;font-size:1rem;margin:16px 0 8px;color:var(--text);">📅 ${formatDate(date)}</div>`;
+    for (const mt of mealOrder) {
+      const items = meals[mt];
+      if (!items || items.length === 0) continue;
+      html += `<div class="meal-section">`;
+      html += `<div class="meal-section-header">${MEAL_EMOJI[mt]} ${MEAL_LABELS[mt]} <span class="meal-badge ${mt}">${items.length}道</span></div>`;
+      items.forEach(e => {
+        html += `
+          <div class="entry-item">
+            <span style="font-size:1.2rem;">🍜</span>
+            <div style="flex:1;">
+              <div class="food-name">${escapeHTML(e.foodName)}</div>
+              ${e.notes ? `<div class="food-notes">${escapeHTML(e.notes)}</div>` : ''}
+            </div>
+            <span class="entry-time">${timeFromISO(e.createdAt)}</span>
+            <button class="entry-delete" data-id="${e.id}" title="删除">🗑️</button>
+          </div>`;
+      });
+      html += `</div>`;
+    }
+  }
+
+  container.innerHTML = html;
+
+  // Bind delete buttons
+  container.querySelectorAll('.entry-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      diaryEntries = diaryEntries.filter(e => e.id !== id);
+      saveEntries();
+      refreshDiary();
+      toast('已删除记录');
+    });
+  });
+}
+
+function refreshDiary() {
+  renderDiaryStats();
+  renderDiaryEntries();
+}
+
+// ============================================================
+// INGREDIENT PICKER: Render
+// ============================================================
+function renderIngredientGrid() {
+  const grid = document.getElementById('ingredient-grid');
+  const search = document.getElementById('ingredient-search').value.trim().toLowerCase();
+
+  let html = '';
+  ALL_INGREDIENTS.forEach(ing => {
+    const sel = selectedIngredients.has(ing);
+    const hidden = search && !ing.includes(search);
+    html += `<span class="ingredient-chip${sel ? ' selected' : ''}${hidden ? ' hidden' : ''}" data-ingredient="${escapeHTML(ing)}">${ing}</span>`;
+  });
+  grid.innerHTML = html;
+
+  // Bind clicks
+  grid.querySelectorAll('.ingredient-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const ing = chip.dataset.ingredient;
+      if (selectedIngredients.has(ing)) {
+        selectedIngredients.delete(ing);
+      } else {
+        selectedIngredients.add(ing);
+      }
+      renderIngredientGrid();
+      renderDishResults();
+    });
+  });
+
+  document.getElementById('selected-count-num').textContent = selectedIngredients.size;
+}
+
+function findMatchingDishes() {
+  const sel = Array.from(selectedIngredients);
+  if (sel.length === 0) return [];
+
+  return DISHES.map(dish => {
+    const matched = dish.ingredients.filter(i => sel.includes(i));
+    const missing = dish.ingredients.filter(i => !sel.includes(i));
+    if (matched.length === 0) return null;
+    return {
+      ...dish,
+      matched,
+      missing,
+      matchRate: matched.length / dish.ingredients.length,
+    };
+  }).filter(Boolean).sort((a, b) => {
+    // Perfect matches first, then by match rate
+    if (b.matchRate === 1 && a.matchRate !== 1) return 1;
+    if (a.matchRate === 1 && b.matchRate !== 1) return -1;
+    return b.matchRate - a.matchRate || a.name.localeCompare(b.name, 'zh');
+  });
+}
+
+function renderDishResults() {
+  const container = document.getElementById('dish-results');
+  const countEl = document.getElementById('results-count');
+  const matches = findMatchingDishes();
+
+  countEl.textContent = matches.length > 0 ? `找到 ${matches.length} 道菜` : '';
+
+  if (selectedIngredients.size === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">👆</div>
+        <p>选择食材后，这里会显示可以做的菜</p>
+      </div>`;
+    return;
+  }
+
+  if (matches.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🤔</div>
+        <p>没有找到匹配的菜肴<br><small>试试多选几种食材，或者换一种搭配</small></p>
+      </div>`;
+    return;
+  }
+
+  let html = '';
+  matches.forEach(d => {
+    const perfect = d.matchRate === 1;
+    html += `
+      <div class="dish-card ${perfect ? 'perfect-match' : 'partial-match'}">
+        <div class="dish-top">
+          <span class="dish-emoji">${d.emoji}</span>
+          <span class="dish-name">${d.name}</span>
+          <span class="match-tag ${perfect ? 'perfect' : 'partial'}">${perfect ? '✨ 完美匹配' : '🔍 部分匹配'}</span>
+          <span style="font-size:0.8rem;color:var(--text-lighter);">${d.category}</span>
+        </div>
+        <div class="dish-ingredients">
+          ${d.matched.map(i => `<span class="dish-ingredient have">✅ ${i}</span>`).join('')}
+          ${d.missing.map(i => `<span class="dish-ingredient missing">❌ ${i}</span>`).join('')}
+        </div>
+        <button class="dish-add-btn" data-dish="${escapeHTML(d.name)}">📝 记入饮食</button>
+      </div>`;
+  });
+  container.innerHTML = html;
+
+  // Bind "add to diary" buttons
+  container.querySelectorAll('.dish-add-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dishName = btn.dataset.dish;
+      addDishToDiary(dishName);
+    });
+  });
+}
+
+function addDishToDiary(dishName) {
+  const now = new Date();
+  const hour = now.getHours();
+  let mealType = 'lunch';
+  if (hour >= 5 && hour < 10) mealType = 'breakfast';
+  else if (hour >= 10 && hour < 14) mealType = 'lunch';
+  else if (hour >= 14 && hour < 17) mealType = 'snack';
+  else mealType = 'dinner';
+
+  const entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    date: todayStr(),
+    mealType,
+    foodName: dishName,
+    notes: '来自食材推荐',
+    createdAt: now.toISOString(),
+  };
+  diaryEntries.push(entry);
+  saveEntries();
+  refreshDiary();
+  toast(`已添加「${dishName}」到饮食记录 ✨`);
+}
+
+function randomIngredients() {
+  selectedIngredients.clear();
+  // 随机选一道菜，然后选中这道菜的所有食材
+  const dish = DISHES[Math.floor(Math.random() * DISHES.length)];
+  dish.ingredients.forEach(ing => selectedIngredients.add(ing));
+  document.getElementById('ingredient-search').value = '';
+  renderIngredientGrid();
+  renderDishResults();
+  toast(`🎲 随机出了「${dish.name}」，已选中 ${selectedIngredients.size} 种食材`);
+}
+
+// ============================================================
+// EVENT HANDLERS
+// ============================================================
+
+// Tab switching
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentTab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + currentTab).classList.add('active');
+  });
+});
+
+// Add entry
+document.getElementById('btn-add-entry').addEventListener('click', () => {
+  const date = document.getElementById('entry-date').value || todayStr();
+  const mealType = document.getElementById('entry-meal-type').value;
+  const foodName = document.getElementById('entry-food').value.trim();
+  const notes = document.getElementById('entry-notes').value.trim();
+
+  if (!foodName) { toast('请输入食物名称'); return; }
+
+  const entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    date,
+    mealType,
+    foodName,
+    notes,
+    createdAt: new Date().toISOString(),
+  };
+  diaryEntries.push(entry);
+  saveEntries();
+  document.getElementById('entry-food').value = '';
+  document.getElementById('entry-notes').value = '';
+  refreshDiary();
+  toast(`已记录「${foodName}」✅`);
+});
+
+// Filter buttons
+document.getElementById('btn-filter-today').addEventListener('click', () => {
+  currentFilterDate = todayStr();
+  document.getElementById('filter-date').value = currentFilterDate;
+  renderDiaryEntries();
+});
+document.getElementById('btn-filter-all').addEventListener('click', () => {
+  currentFilterDate = null;
+  document.getElementById('filter-date').value = '';
+  renderDiaryEntries();
+});
+document.getElementById('filter-date').addEventListener('change', (e) => {
+  currentFilterDate = e.target.value || null;
+  renderDiaryEntries();
+});
+
+// Ingredient search
+document.getElementById('ingredient-search').addEventListener('input', renderIngredientGrid);
+
+// Ingredient action buttons
+document.getElementById('btn-random').addEventListener('click', randomIngredients);
+document.getElementById('btn-clear-ingredients').addEventListener('click', () => {
+  selectedIngredients.clear();
+  document.getElementById('ingredient-search').value = '';
+  renderIngredientGrid();
+  renderDishResults();
+});
+document.getElementById('btn-select-all').addEventListener('click', () => {
+  ALL_INGREDIENTS.forEach(i => selectedIngredients.add(i));
+  document.getElementById('ingredient-search').value = '';
+  renderIngredientGrid();
+  renderDishResults();
+  toast(`已选择全部 ${ALL_INGREDIENTS.length} 种食材`);
+});
+
+// Enter key in food input
+document.getElementById('entry-food').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('btn-add-entry').click();
+});
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  document.getElementById('entry-date').value = todayStr();
+  document.getElementById('filter-date').value = todayStr();
+  currentFilterDate = todayStr();
+  renderIngredientGrid();
+  renderDishResults();
+  refreshDiary();
+
+  // Focus food input when switching to diary
+  document.querySelector('[data-tab="diary"]').addEventListener('click', () => {
+    setTimeout(() => document.getElementById('entry-food').focus(), 100);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
